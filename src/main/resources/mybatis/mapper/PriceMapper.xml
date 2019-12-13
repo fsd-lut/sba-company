@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fsd.stock.company.mapper.PriceMapper">
+
+	<resultMap id="PriceMap" type="StockPrice">
+		<result property="companyCode" column="company_code" />
+		<result property="stockExchangesId" column="stock_exchanges_ID" />
+		<result property="price" column="price" />
+		<result property="date" column="date" jdbcType="DATE"/>
+		<result property="time" column="time" />
+	</resultMap>
+
+	<select id="getStockPrice" resultMap="PriceMap">
+		SELECT
+		company_code,stock_exchanges_ID,price,date,time
+		FROM
+		stockprice
+		WHERE 1=1
+		<if test="companyCode != null"> AND company_code = #{companyCode} </if>
+		<if test="fromDate != null"> AND date >= #{fromDate} </if>
+		<if test="endDate!= null"> AND #{endDate} >= date </if>
+	</select>
+
+</mapper>

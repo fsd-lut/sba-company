@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fsd.stock.company.mapper.IpoMapper">
+
+ 	<resultMap id="IpoMap" type="IpoDetails">
+	    <result property="ipoId" column="IPO_id" />
+		<result property="companyName" column="company_name" />
+		<result property="stockExchangesId" column="stock_exchanges_ID" />
+		<result property="sharePrice" column="share_price" />
+		<result property="sharesNum" column="shares_num" />
+		<result property="openDateTime" column="open_date_time" />
+		<result property="remarks" column="remarks" />
+	</resultMap>
+
+	<insert id="saveIpo" parameterType="IpoDetails">
+		INSERT INTO
+		IPOdetails(company_name,stock_exchanges_ID,share_price,shares_num,open_date_time,remarks)
+		VALUES
+		(#{companyName},#{stockExchangesId},#{sharePrice},#{sharesNum},#{openDateTime},#{remarks})
+	</insert>
+	
+	<select id="selectIpoDetails" resultMap="IpoMap">
+        SELECT
+          IPO_id,company_name,stock_exchanges_ID,share_price,shares_num,open_date_time,remarks
+        FROM
+          IPOdetails
+        WHERE
+          IPO_id = #{ipoId}
+    </select>
+    
+    <select id="selectIpoByCompany" resultMap="IpoMap">
+        SELECT
+          IPO_id,company_name,stock_exchanges_ID,share_price,shares_num,open_date_time,remarks
+        FROM
+          IPOdetails
+        WHERE
+          company_name = #{companyName}
+    </select>
+    
+    <update id="updateIpo" parameterType="IpoDetails">
+        UPDATE
+          IPOdetails
+        <set>
+            <if test="companyName != null"> company_name = #{companyName}, </if>
+            <if test="stockExchangesId != null"> stock_exchanges_ID = #{stockExchangesId}, </if>
+            <if test="sharePrice != null"> share_price = #{sharePrice}, </if>
+            <if test="sharesNum != null"> shares_num = #{sharesNum}, </if>
+            <if test="openDateTime != null"> open_date_time = #{openDateTime}, </if>
+            <if test="remarks != null"> remarks = #{remarks}, </if>
+        </set>
+        WHERE
+          IPO_id = #{ipoId}
+    </update>
+    
+    <select id="listAll" resultMap="IpoMap">
+       SELECT
+          IPO_id,company_name,stock_exchanges_ID,share_price,shares_num,open_date_time,remarks
+        FROM
+          IPOdetails
+    </select>
+
+</mapper>

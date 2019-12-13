@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fsd.stock.company.mapper.CompanyMapper">
+
+	<resultMap id="CompanyMap" type="BaseCompany">
+	     <result property="companyCode" column="company_code" />
+		<result property="companyName" column="company_name" />
+		<result property="turnover" column="turnover" />
+		<result property="ceo" column="CEO" />
+		<result property="directors" column="directors" />
+		<result property="stockExchangesId" column="stock_exchanges_ID" />
+		<result property="sectorName" column="sector_name" />
+		<result property="brief" column="brief" />
+	</resultMap>
+
+	<insert id="saveCompany" parameterType="BaseCompany">
+		INSERT INTO
+		company(company_code,company_name,turnover,CEO,directors,stock_exchanges_ID,sector_name,brief)
+		VALUES
+		(#{companyCode},#{companyName},#{turnover},#{ceo},#{directors},#{stockExchangesId},#{sectorName},#{brief})
+	</insert>
+	
+	<select id="selectCompanyByCode" resultMap="CompanyMap">
+        SELECT
+          company_code,company_name,turnover,CEO,directors,stock_exchanges_ID,sector_name,brief
+        FROM
+          company
+        WHERE
+          company_code = #{companyCode}
+    </select>
+    
+    <select id="listCompanyByName" resultMap="CompanyMap">
+       SELECT
+          company_code,company_name,turnover,CEO,directors,stock_exchanges_ID,sector_name,brief
+        FROM
+          company
+		<if test="companyName != '' and companyName != null">
+            WHERE company_name LIKE CONCAT(CONCAT('%',#{companyName}),'%')
+        </if>          
+    </select>
+    
+    <select id="listBySector" resultMap="CompanyMap">
+       SELECT
+          company_code,company_name,turnover,CEO,directors,stock_exchanges_ID,sector_name,brief
+        FROM
+          company
+		<if test="sectorName != '' and sectorName != null">
+            WHERE sector_name LIKE CONCAT(CONCAT('%',#{sectorName}),'%')
+        </if>          
+    </select>
+    
+     <select id="listAll" resultMap="CompanyMap">
+       SELECT
+          company_code,company_name,turnover,CEO,directors,stock_exchanges_ID,sector_name,brief
+        FROM
+          company
+    </select>
+    
+    <update id="updateCompany" parameterType="BaseCompany">
+        UPDATE
+          company
+        <set>
+            <if test="companyName != null"> company_name = #{companyName}, </if>
+            <if test="turnover != null"> turnover = #{turnover}, </if>
+            <if test="ceo != null"> CEO = #{ceo}, </if>
+            <if test="directors != null"> directors = #{directors}, </if>
+            <if test="stockExchangesId != null"> stock_exchanges_ID = #{stockExchangesId}, </if>
+            <if test="sectorName != null"> sector_name = #{sectorName}, </if>
+            <if test="brief != null"> brief = #{brief}, </if>
+        </set>
+        WHERE
+          company_code = #{companyCode}
+    </update>
+
+</mapper>
